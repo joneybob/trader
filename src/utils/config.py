@@ -44,8 +44,10 @@ class Settings(BaseSettings):
     stop_loss_enabled: bool = True
 
     # Fees
-    kalshi_fee_rate: Decimal = Decimal("0.00")
-    polymarket_fee_rate: Decimal = Decimal("0.02")
+    kalshi_taker_fee_rate: Decimal = Decimal("0.07")  # 7% of P×(1-P) for general markets
+    kalshi_maker_fee_rate: Decimal = Decimal("0.0175")  # 1.75% of P×(1-P) for maker orders
+    kalshi_special_market_fee_rate: Decimal = Decimal("0.035")  # 3.5% for S&P/NASDAQ markets
+    polymarket_fee_rate: Decimal = Decimal("0.02")  # ~2% including gas
 
     # Logging
     log_level: str = "INFO"
@@ -74,10 +76,17 @@ class Settings(BaseSettings):
         """Get Polymarket CLOB URL."""
         return "https://clob.polymarket.com"
 
-    @property
-    def total_fee_rate(self) -> Decimal:
-        """Calculate total fee rate for both platforms."""
-        return self.kalshi_fee_rate + self.polymarket_fee_rate
+    def is_special_kalshi_market(self, market_ticker: str) -> bool:
+        """
+        Check if market is a special fee market (S&P 500 or NASDAQ-100).
+
+        Args:
+            market_ticker: Kalshi market ticker
+
+        Returns:
+            True if special fee applies
+        """
+        return market_ticker.startswith(("INX", "NASDAQ100"))
 
     def validate_credentials(self) -> dict[str, bool]:
         """Validate that required credentials are set."""
