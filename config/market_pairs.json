@@ -1,0 +1,16 @@
+{
+  "market_pairs": [
+    {
+      "kalshi": "EXAMPLE-MARKET-ID",
+      "polymarket": "0x1234567890abcdef",
+      "description": "Example: Will the S&P 500 close above 4500 on Dec 31, 2024?"
+    }
+  ],
+  "notes": [
+    "Add manual market pair mappings here to ensure accurate matching.",
+    "Format:",
+    "  - kalshi: Kalshi market ticker (e.g., 'INXD-23DEC31-T4500')",
+    "  - polymarket: Polymarket token ID (hexadecimal string)",
+    "  - description: Human-readable description of the event"
+  ]
+}
